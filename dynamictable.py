@@ -24,14 +24,16 @@ class TestDynamicTable(unittest.TestCase):
         )
         table_data_button.click()
 
-        # Step 3: Input data into the text fields
-        input_data = '[{"name": "Bob", "age": 20, "gender": "male"}, {"name": "George", "age": 42, "gender": "male"}, {"name": "Sara", "age": 42, "gender": "female"}, {"name": "Conor", "age": 40, "gender": "male"}, {"name": "Jennifer", "age": 42, "gender": "female"}]'
+        # Step 3: Read data from JSON file
+        with open('data.json') as json_file:
+            expected_data = json.load(json_file)
 
+        # Input data into the text fields
         input_text_field = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'jsondata'))
         )
         input_text_field.clear()
-        input_text_field.send_keys(input_data)
+        input_text_field.send_keys(json.dumps(expected_data))
 
         # Introduce a short sleep to wait for the input to be processed (You can improve this using WebDriverWait)
         time.sleep(1)
@@ -60,7 +62,6 @@ class TestDynamicTable(unittest.TestCase):
         )
 
         # Step 4: Assert the data in the table
-        expected_data = json.loads(input_data)
         rows = table_body.find_elements(By.TAG_NAME, 'tr')
 
         for expected_row_index, expected_row in enumerate(expected_data):
