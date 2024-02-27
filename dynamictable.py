@@ -63,10 +63,10 @@ class TestDynamicTable(unittest.TestCase):
         expected_data = json.loads(input_data)
         rows = table_body.find_elements(By.TAG_NAME, 'tr')
 
-        for expected_row in expected_data:
+        for expected_row_index, expected_row in enumerate(expected_data):
             # Check if the expected data is present in the table
             matching_row = None
-            for row in rows:
+            for row_index, row in enumerate(rows):
                 columns = row.find_elements(By.TAG_NAME, 'td')
                 if (
                     columns and
@@ -80,7 +80,7 @@ class TestDynamicTable(unittest.TestCase):
             self.assertIsNotNone(matching_row, f"Row not found for {expected_row}")
 
             # Print the updated row and values
-            print(f"Row {rows.index(matching_row) + 1} - Name: {expected_row['name']}, Age: {expected_row['age']}, Gender: {expected_row['gender']}")
+            print(f"Row {expected_row_index + 1} - Name: {expected_row['name']}, Age: {expected_row['age']}, Gender: {expected_row['gender']}")
 
         # Test Passed Message
         print("Test Passed: All rows are correctly displayed in the dynamic table.")
